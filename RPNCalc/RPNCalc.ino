@@ -75,7 +75,7 @@ lcd.begin(16, 2);
 delay(50);
 lcd.print("-RPN Calculator-");
 lcd.setCursor(0, 1);
-lcd.print("V: 0.1 - (ALPHA)");
+lcd.print("V: 0.1b- (ALPHA)");
 delay(2000);
 lcd.clear();
 }
@@ -94,6 +94,7 @@ if (keyp != 11 && keyp != 10 && menu==0){
 }
 
 if (digitalRead(men2) == LOW){
+  if (menu == 0){
   y = x;
   lcd.clear();
   lcd.setCursor(0, 0);
@@ -102,18 +103,36 @@ if (digitalRead(men2) == LOW){
   ant = 0;
   ox = "";
   delay(100);
+  }
+  menu = 0;
 }
 
 if (keyp == 10){
-  lcd.clear();
-  lcd.setCursor(0, 0);
-  y = x + y;
-  lcd.print(y);
-  ox = "";
-  ant=0;
-   
+menu = 1;
 }
 
+
+if (keyp != 11 && menu==1){
+  if (keyp == 1){
+    y = x + y;
+    result(x, y);
+  }
+
+  if (keyp == 2){
+    y = x - y;
+    result(x, y);
+  }
+
+  if (keyp == 3){
+    y = x * y;
+    result(x, y);
+  }
+
+    if (keyp == 4){
+    y = x / y;
+    result(x, y);
+  }
+}
 
 Serial.print("x: ");
 Serial.println(x);
@@ -137,8 +156,13 @@ void menuDraw(int menu){
   
 }
 
-void scrDraw(int x, int y){
-  
+void result(int x, int y){
+  lcd.clear();
+  lcd.print(y);
+  ox = "";
+  ant = 0;
+  delay(100);
+  menu = 0;
 }
 
 int keyread(int a,int b,int c,int d,int aa,int bb,int cc,int dur,int tecdel){
