@@ -41,8 +41,11 @@ int ok;
 int qq;
 int pos;
 
-unsigned long x;
-unsigned long y;
+boolean check = false;
+boolean check2 = false;
+ 
+float x;
+float y;
 
 String ox;
 String oy;
@@ -75,8 +78,8 @@ lcd.begin(16, 2);
 delay(50);
 lcd.print("-RPN Calculator-");
 lcd.setCursor(0, 1);
-lcd.print("V: 0.1b- (ALPHA)");
-delay(2000);
+lcd.print("V: 0.1b  (ALPHA)");
+delay(500);
 lcd.clear();
 }
 
@@ -90,7 +93,7 @@ if (keyp != 11 && keyp != 10 && menu==0){
           lcd.setCursor(ant, 1);
           ant = ant + 1; 
           lcd.print(sx);
-  x = ox.toInt(); 
+  x = ox.toFloat(); 
 }
 
 if (digitalRead(men2) == LOW){
@@ -114,25 +117,73 @@ menu = 1;
 
 if (keyp != 11 && menu==1){
   if (keyp == 1){
-    y = x + y;
+    y = y + x;
     result(x, y);
   }
 
   if (keyp == 2){
-    y = x - y;
+    y = y - x;
     result(x, y);
   }
 
   if (keyp == 3){
-    y = x * y;
+    y = y * x;
     result(x, y);
   }
 
-    if (keyp == 4){
-    y = x / y;
-    result(x, y);
+   if (keyp == 4){
+   y = y / x;
+   result(x, y);
+  
   }
+
+   if (keyp == 5){
+   y = pow(y, x);
+   result(x, y);
+  
+  }
+
+   if (keyp == 6){
+   y = sqrt(x);
+   result(x, y);
+  
+  }
+
+   if (keyp == 7){
+   ox = "";
+   x = 3.1415926; 
+   ant = 9;
+   lcd.setCursor(0, 1);
+   lcd.print("                ");
+   lcd.setCursor(0, 1);
+   lcd.print(x, 5);
+   menu = 0; 
+  }
+
+   if (keyp == 0){
+  String sx = ".";
+ ox = ox + sx;
+          lcd.setCursor(ant, 1);
+          ant = ant + 1; 
+          lcd.print(sx);
+  x = ox.toFloat(); 
+  menu = 0;
+  }
+  
 }
+
+if (menu == 1 && check == false){
+  lcd.setCursor(15, 0);
+  lcd.print("^");
+  check = true;
+}
+
+if (menu == 0 && check == true){
+  lcd.setCursor(15, 0);
+  lcd.print(" ");
+  check = false;
+}
+
 
 Serial.print("x: ");
 Serial.println(x);
@@ -156,9 +207,9 @@ void menuDraw(int menu){
   
 }
 
-void result(int x, int y){
+void result(float x, float y){
   lcd.clear();
-  lcd.print(y);
+  lcd.print(y, 5);
   ox = "";
   ant = 0;
   delay(100);
